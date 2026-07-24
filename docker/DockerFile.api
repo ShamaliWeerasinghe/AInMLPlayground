@@ -1,0 +1,18 @@
+FROM python:3.12-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR /app
+
+# Install API dependencies first for better layer caching.
+COPY requirements/api.txt /app/requirements/api.txt
+RUN pip install --no-cache-dir -r /app/requirements/api.txt
+
+# Copy application source and model artifacts.
+COPY api /app/api
+COPY ml_models /app/ml_models
+
+EXPOSE 8000
+
+CMD ["uvicorn", "api.fastapi.ml_api:app", "--host", "0.0.0.0", "--port", "8000"]

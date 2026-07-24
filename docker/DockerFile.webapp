@@ -1,0 +1,42 @@
+# Use a lightweight Python 3.12 base image to keep the final image size small.
+FROM python:3.12-slim
+
+# Prevent Python from writing .pyc bytecode files into the container filesystem.
+ENV PYTHONDONTWRITEBYTECODE=1
+# Force stdout/stderr to flush immediately so logs appear in real time.
+ENV PYTHONUNBUFFERED=1
+
+# Set /app as the working directory; all subsequent paths resolve relative to it.
+WORKDIR /app
+
+# Copy only the requirements file first to take advantage of Docker layer caching.
+# If app code changes but requirements don't, pip install is skipped on rebuild.
+COPY requirements/app.txt /app/requirements/app.txt
+# Install dependencies without saving a pip download cache to keep the image smaller.
+RUN pip install --no-cache-dir -r /app/requirements/app.txt
+
+# Copy the Streamlit app source code into the container.
+COPY webapp /app/webapp
+# Copy the trained model artifact so the app can load it at runtime.
+COPY ml_models /app/ml_models
+
+# Document that the container listens on port 8501 (Streamlit's default port).
+EXPOSE 8501
+
+# Start the Streamlit app, binding to all interfaces so it is reachable outside the container.
+CMD ["streamlit", "run", "webapp/streamlit_app.py", "--server.address=0.0.0.0", "--server.port=8501"]
+
+# =============================================================================
+# USAGE
+# =============================================================================
+# Build the image and tag it with Docker Hub username and version:
+#   docker build -f docker/DockerFile.webapp -t <dockerhub-username>/streamlit-webapp:v1 .
+#
+# Push the image to Docker Hub:
+#   docker push <dockerhub-username>/streamlit-webapp:v1
+#
+# Run the container locally, mapping host port 8501 to container port 8501:
+#   docker run -p 8501:8501 <dockerhub-username>/streamlit-webapp:v1
+#
+# Then open http://localhost:8501 in your browser.
+# =============================================================================
