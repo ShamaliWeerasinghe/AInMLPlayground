@@ -1,0 +1,50 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+.aivenv/
+
+# Jupyter / notebooks
+.ipynb_checkpoints/
+*.ipynb_checkpoints/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Local test and tool caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Model / data artifacts
+*.joblib
+*.pkl
+*.h5
+*.pt
+*.bin
+*.parquet
+*.log
+
+# ML / experiment outputs
+mlruns/
+mlartifacts/
+wandb/
+checkpoints/
+outputs/
+
+# OS/editor noise
+.DS_Store
+.vscode/
+.idea/
