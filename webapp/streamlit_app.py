@@ -1,3 +1,5 @@
+# Streamlit documentation: https://docs.streamlit.io/
+
 from datetime import datetime
 from pathlib import Path
 

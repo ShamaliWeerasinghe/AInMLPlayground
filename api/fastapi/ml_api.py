@@ -1,3 +1,4 @@
+# FastAPI documentation: https://fastapi.tiangolo.com/
 from pathlib import Path
 
 import joblib
